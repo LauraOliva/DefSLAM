@@ -9,4 +9,4 @@ echo "Configuring and building DefSLAM ..."
 mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j 2
+make -j 8

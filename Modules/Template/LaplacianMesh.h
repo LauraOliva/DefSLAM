@@ -77,9 +77,9 @@ namespace defSLAM
     // Get current mean curvature as Laplacian vector
     Eigen::Vector3d const GetMeanCurvatureVector(Node *n);
 
-    std::map<Node *, Eigen::Vector3d, std::less<Node *>,
-             Eigen::aligned_allocator<std::pair<const Node *, Eigen::Vector3d>>>
+    std::unordered_map<Node *, Eigen::Vector3d>
         LaplacianCoords; // Laplacian coordinates.
+
   };
 } // namespace defSLAM
 #endif

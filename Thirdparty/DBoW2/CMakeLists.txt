@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(DBoW2)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -march=native")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 ")
+
+# set(CMAKE_CXX_COMPILER "/usr/bin/g++-10")
+# set(CMAKE_C_COMPILER "/usr/bin/gcc-10")
 
 # Check C++11 or C++0x support
 include(CheckCXXCompilerFlag)
@@ -17,7 +20,8 @@ elseif(COMPILER_SUPPORTS_CXX0X)
    add_definitions(-DCOMPILEDWITHC0X)
    message(STATUS "Using flag -std=c++0x.")
 else()
-   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
+add_definitions(-DCOMPILEDWITHC14)
+   #message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
 endif()
 
 set(HDRS_DBOW2
@@ -40,7 +44,7 @@ set(SRCS_DUTILS
   DUtils/Random.cpp
   DUtils/Timestamp.cpp)
 
-find_package(OpenCV 4.0.0 QUIET)
+find_package(OpenCV 3.0 QUIET)
 if(NOT OpenCV_FOUND)
    find_package(OpenCV 2.4.3 QUIET)
    if(NOT OpenCV_FOUND)

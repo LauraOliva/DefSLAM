@@ -5,13 +5,21 @@ SET(CMAKE_BUILD_TYPE RELEASE)
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -O3 -march=native -fopenmp -Wno-deprecated-declarations" )
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -march=native -fopenmp -Wno-deprecated-declarations")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -O3 -fopenmp -Wno-deprecated-declarations" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -fopenmp -Wno-deprecated-declarations")
+# set(CMAKE_CXX_COMPILER "/usr/bin/g++-10")
+# set(CMAKE_C_COMPILER "/usr/bin/gcc-10")
 
 # Check C++14 or C++0x support
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 if(COMPILER_SUPPORTS_CXX14)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
@@ -22,12 +30,13 @@ elseif(COMPILER_SUPPORTS_CXX0X)
    add_definitions(-DCOMPILEDWITHC0X)
    message(STATUS "Using flag -std=c++0x.")
 else()
+# add_definitions(-DCOMPILEDWITHC14)
    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
 endif() 
  
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
  
-find_package(OpenCV 4.0.0 REQUIRED)
+find_package(OpenCV 3.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 FIND_PACKAGE(Ceres REQUIRED)
 find_package(Eigen3 REQUIRED)

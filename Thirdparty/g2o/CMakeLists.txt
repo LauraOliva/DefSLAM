@@ -11,6 +11,9 @@ IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release)
 ENDIF()
 SET (G2O_LIB_TYPE SHARED)
+
+set(CMAKE_CXX_COMPILER "/usr/bin/g++-10")
+set(CMAKE_C_COMPILER "/usr/bin/gcc-10")
  
 # There seems to be an issue with MSVC8
 # see http://eigen.tuxfamily.org/bz/show_bug.cgi?id=83
