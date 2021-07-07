@@ -3,8 +3,8 @@ close all; clear all;
 l = [];
 
 %% Load files from folder
-path ='/home/laura/ExperimentsResults/DefSLAM/Hamlyn/original/';
-name = "mandala";
+path ='/home/laura/ExperimentsResults/DefSLAM/Hamlyn/abdominal/';
+name = "abdominal";
 l = [l name];
 
 % Timestamps = ni, strat=200
@@ -21,7 +21,7 @@ map_points_filename = path+"/MapPointsUsage.txt";
 data_scale = dlmread(scale_filename);
 figure(1);
 hold on;
-plot(data_scale(:,1), data_scale(:,2));
+plot(data_scale(:,1), data_scale(:,2)/data_scale(1,2));
 title("Scale Variation");
 ylabel("Scale drift");
 xlabel("#Frame");

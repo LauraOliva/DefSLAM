@@ -1,0 +1,9 @@
+profundidad del mapa local / produndidad mapa global -> scala
+con respecto al primer frame (primeros 100 frames -> media)
+
+Matching - SuperPoint - A-KAZE 
+SuperPoint - ORB-SLAM3
+A-KAZE
+
+SearchByProjection - DefORBMatcher 220 - GetFacet
+searchBySchwarp - mapping repescar puntos
