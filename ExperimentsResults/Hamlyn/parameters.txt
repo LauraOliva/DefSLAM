@@ -1,0 +1,38 @@
+ABDOMINAL SEQUENCE
+
+abdominal: original parameters
+abdominal_300_features: original + 300 features
+abdominal_5000_features: original + 5000 features
+300_features
+    abduomial_high_fast: original + 300 features + initThFAST 20 + minThFAST 7
+    abdomina_laplacian_10: original + 300 features + laplacian 10
+    abdomina_laplacian_100: original + 300 features + laplacian 100
+    abdominal_inex_10000: original + 300 features + Inextensibility 10000
+    abdominal_inex_20000: original + 300 features + Inextensibility 20000
+    abdominal_temporal_001: original + 300 features + temporal 0.01
+    abdominal_temporal_01: original + 300 features + temporal 0.1
+    abdominal_point_temp_50: original + 300 features + pointsToTemplate 50
+    abdominal_point_temp_200: original + 300 features + pointsToTemplate 200
+    
+
+
+abduomial_high_fast: original + initThFAST 20 + minThFAST 7
+abdomina_laplacian_10: original + laplacian 10
+abdomina_laplacian_100: original + laplacian 100
+abdominal_inex_10000: original + Inextensibility 10000
+abdominal_inex_20000: original + Inextensibility 20000
+abdominal_temporal_001: original + temporal 0.01
+abdominal_temporal_01: original + temporal 0.1
+abdominal_point_temp_50: original + pointsToTemplate 50
+abdominal_point_temp_200: original + pointsToTemplate 200
+abdominal_chi_001: original + chiLimit 0.01 - not able to finish
+abdominal_chi_01: original + chiLimit 0.1
+abdominal_bending_005: original + bending 0.05
+abdominal_bending_03: original + bending 0.3
+abdominal_schwarp_0001: original + Schwarp.Regularizer 0.001 - not able to finish
+abdominal_schwarp_01: original + Schwarp.Regularizer 0.1
+
+
+HEART SEQUENCE
+
+heart: original parameters - not finished
