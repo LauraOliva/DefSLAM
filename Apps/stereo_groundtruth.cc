@@ -145,10 +145,9 @@ int main(int argc, char **argv)
 
     cv::Mat _mask(imLeftRect.rows, imLeftRect.cols, CV_8UC1, cv::Scalar(255));
     stringstream ss;
-    ss << std::internal << std::setfill('0') << std::setw(5)
+    ss << std::internal << std::setfill('0') << std::setw(6)
         << uint(counter);
     counter++;
-    cout << "lalala " << ss.str() << endl;
     SLAM.TrackMonocularGT(imLeftRect, imRightRect, ni, _mask, ss.str());
   }
 

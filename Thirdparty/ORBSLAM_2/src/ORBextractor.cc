@@ -800,6 +800,7 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
         f_kpts << path << ts.substr(0, ts.find("."))  << "_kpts.npy";
         getKeypoints(f_kpts.str(), vToDistributeKeys);
         nkeypoints = vToDistributeKeys.size();
+        cout << "nkpts " << nkeypoints << endl;
             
 
 
@@ -839,7 +840,7 @@ static void computeDescriptors(const Mat& image, vector<KeyPoint>& keypoints, Ma
 }
 
 void ORBextractor::getKeypoints(std::string filename , std::vector<cv::KeyPoint> & keyPoints){
-    cout << "Keypoints filename " << filename << endl;
+    // cout << "Keypoints filename " << filename << endl;
     cnpy::NpyArray arr = cnpy::npy_load(filename);
     int nkeypoints = arr.shape[0];
 
@@ -855,10 +856,11 @@ void ORBextractor::getKeypoints(std::string filename , std::vector<cv::KeyPoint>
 
 
     }
+    cout << "N keyporints " << nkeypoints << endl;
 }
 
 void ORBextractor::getdescriptors(std::string filename,cv::Mat & descriptor,int nkeypoints){
-    cout << "Desc filename " << filename << endl;
+    // cout << "Desc filename " << filename << endl;
     std::ifstream getfile(filename);
     int i = 0;
     while(!getfile.eof())
@@ -929,15 +931,11 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
 			vector<KeyPoint> keypoints_old = allKeypoints[level];
 			int nkeypointsLevel = (int)keypoints_old.size();
 			for(int i = 0; i < nkeypointsLevel; i++){
-				float x = keypoints_old[i].pt.x;
-				float y = keypoints_old[i].pt.y;
-				// if((pow(x-282.5,2) + pow(y-262.5,2)) < pow(230,2)){
-				if((pow(x-252,2) + pow(y-261,2)) < pow(300 /* 225*/,2) and ((mask.rows == 0 ) or (mask.rows != 0 and mask.at<bool>(y,x) == 0))){
-					kpts.push_back(keypoints_old[i]);
-					if( keypoints_old[i].class_id >= all_desc.rows) cout << "Error: " << keypoints_old[i].class_id << " " << all_desc.rows << " " << nkeypoints << endl;
-					all_desc.row(keypoints_old[i].class_id).copyTo(filter_desc.row(j));
-					j++;
-				}
+				
+                kpts.push_back(keypoints_old[i]);
+                all_desc.row(keypoints_old[i].class_id).copyTo(filter_desc.row(j));
+                j++;
+				
 			}
 		}
 

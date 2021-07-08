@@ -273,6 +273,7 @@ namespace defSLAM
       cerr << "ERROR: you called TrackMonocular but input sensor was not set to "
               "Monocular."
            << endl;
+          cout << "Error" << endl;
       exit(-1);
     }
     cv::Mat Mask;
@@ -318,8 +319,9 @@ namespace defSLAM
         mbReset = false;
       }
     }
-
+    cout << "No llega" << endl;
     cv::Mat Tcw = mpTracker->GrabImageMonocularGT(im, imRight, timestamp, Mask, filename);
+    cout << "Sale" << endl;
 #ifndef ORBSLAM
 #ifndef PARALLEL
     if (mpTracker->mState == Tracking::eTrackingState::OK)

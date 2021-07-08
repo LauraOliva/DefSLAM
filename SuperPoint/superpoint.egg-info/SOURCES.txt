@@ -1,0 +1,16 @@
+README.md
+setup.py
+superpoint/__init__.py
+superpoint/experiment.py
+superpoint/export_descriptors.py
+superpoint/export_detections.py
+superpoint/export_detections_repeatability.py
+superpoint/export_model.py
+superpoint/generate_coco_patches.py
+superpoint/match_features_demo.py
+superpoint/save_features_demo.py
+superpoint/settings.py
+superpoint.egg-info/PKG-INFO
+superpoint.egg-info/SOURCES.txt
+superpoint.egg-info/dependency_links.txt
+superpoint.egg-info/top_level.txt
