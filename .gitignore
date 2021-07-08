@@ -20,3 +20,5 @@ cmake-build-debug/
 
 Modules/Template/LaplacianMesh.h
 Thirdparty/ORBSLAM_2/include/LoopClosing.h
+
+ExperimentsResults
