@@ -68,14 +68,14 @@ namespace defSLAM
     virtual cv::Mat GrabImageMonocularGT(const cv::Mat &im,
                                          const cv::Mat &imRight,
                                          const double &timestamp,
-                                         cv::Mat _mask = cv::Mat());
+                                         cv::Mat _mask = cv::Mat(), string filename="");
 
     // Run for image with ground truth through a depth image. It is used for
     // the CT image of the phantom datasets, but it should be usable for rgbd image.
     virtual cv::Mat GrabImageMonocularCTGT(const cv::Mat &im,
                                            const cv::Mat &imDepth,
                                            const double &timestamp,
-                                           cv::Mat _mask = cv::Mat());
+                                           cv::Mat _mask = cv::Mat(), string filename="");
 
   protected:
     // Main function of tracking.

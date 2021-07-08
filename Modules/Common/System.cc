@@ -184,7 +184,7 @@ namespace defSLAM
   }
 
   cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp,
-                                 const cv::Mat _mask)
+                                 const cv::Mat _mask, const string filename)
   {
     cv::Mat Mask;
     if (_mask.empty())
@@ -240,7 +240,7 @@ namespace defSLAM
 #ifndef ORBSLAM
     // static_cast<DefLocalMapping *>(mpLocalMapper)->DoNotSaveResults();
 #endif
-    cv::Mat Tcw = mpTracker->GrabImageMonocular(im, timestamp);
+    cv::Mat Tcw = mpTracker->GrabImageMonocular(im, timestamp, filename);
     if (mpViewer)
       mpViewer->Updatetimestamp(timestamp);
 
@@ -266,7 +266,7 @@ namespace defSLAM
   }
 
   cv::Mat System::TrackMonocularGT(const cv::Mat &im, const cv::Mat &imRight,
-                                   const double &timestamp, const cv::Mat _mask)
+                                   const double &timestamp, const cv::Mat _mask, const string filename)
   {
     if (mSensor != MONOCULAR)
     {
@@ -319,7 +319,7 @@ namespace defSLAM
       }
     }
 
-    cv::Mat Tcw = mpTracker->GrabImageMonocularGT(im, imRight, timestamp, Mask);
+    cv::Mat Tcw = mpTracker->GrabImageMonocularGT(im, imRight, timestamp, Mask, filename);
 #ifndef ORBSLAM
 #ifndef PARALLEL
     if (mpTracker->mState == Tracking::eTrackingState::OK)
@@ -342,7 +342,7 @@ namespace defSLAM
 
   cv::Mat System::TrackMonocularCTGT(const cv::Mat &im, const cv::Mat &CTdepth,
                                      const double &timestamp,
-                                     const cv::Mat _mask)
+                                     const cv::Mat _mask, const string filename)
   {
     if (mSensor != MONOCULAR)
     {
@@ -395,7 +395,7 @@ namespace defSLAM
       }
     }
 
-    cv::Mat Tcw = mpTracker->GrabImageMonocularCTGT(im, CTdepth, timestamp, Mask);
+    cv::Mat Tcw = mpTracker->GrabImageMonocularCTGT(im, CTdepth, timestamp, Mask, filename);
 #ifndef ORBSLAM
 #ifndef PARALLEL
     if (mpTracker->mState == Tracking::eTrackingState::OK)

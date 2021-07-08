@@ -78,6 +78,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/g2o)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/BBS)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/ORBSLAM_2)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Modules/ToolsPCL)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/cnpy)
 
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
@@ -89,6 +90,7 @@ g2o
 BBS
 ORBSLAM
 ToolsPCL
+cnpy
 )
  
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Apps)

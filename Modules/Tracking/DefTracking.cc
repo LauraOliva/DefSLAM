@@ -455,7 +455,7 @@ namespace defSLAM
   cv::Mat DefTracking::GrabImageMonocularGT(const cv::Mat &imRectLeft,
                                             const cv::Mat &imRectRight,
                                             const double &timestamp,
-                                            cv::Mat _mask)
+                                            cv::Mat _mask, string filename)
   {
     mImGray = imRectLeft.clone();
     cv::Mat imGrayRight = imRectRight;
@@ -494,7 +494,7 @@ namespace defSLAM
 
     mCurrentFrame = new GroundTruthFrame(
         mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK, mDistCoef,
-        mbf, mThDepth, imRectLeft, imGrayRight, _mask);
+        mbf, mThDepth, imRectLeft, imGrayRight, _mask, filename);
 
     this->Track();
 
@@ -521,7 +521,7 @@ namespace defSLAM
   cv::Mat DefTracking::GrabImageMonocularCTGT(const cv::Mat &imRectLeft,
                                               const cv::Mat &imDepth,
                                               const double &timestamp,
-                                              cv::Mat _mask)
+                                              cv::Mat _mask, string filename)
   {
     mImGray = imRectLeft.clone();
     imRectLeft.copyTo(mImRGB);
@@ -555,7 +555,7 @@ namespace defSLAM
 
     mCurrentFrame = new GroundTruthFrame(
         mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK, mDistCoef,
-        mbf, mThDepth, imRectLeft, imDepth, true, _mask);
+        mbf, mThDepth, imRectLeft, imDepth, true, _mask, filename);
 
     this->Track();
 

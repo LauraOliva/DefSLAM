@@ -54,9 +54,9 @@ namespace defSLAM
                                      cv::Mat &K, cv::Mat &distCoef,
                                      const float &bf, const float &thDepth,
                                      const cv::Mat &ImRGB, const cv::Mat &ImRight,
-                                     cv::Mat _mask)
+                                     cv::Mat _mask, string filename)
       : Frame(imGray, timeStamp, extractor, voc, K, distCoef, bf, thDepth, ImRGB,
-              _mask)
+              _mask, filename)
   {
     this->imRight = (ImRight);
     // Do not use stereo to initialize
@@ -72,9 +72,9 @@ namespace defSLAM
       ORB_SLAM2::ORBextractor *extractorLeft,
       ORB_SLAM2::ORBextractor *extractorRight, ORB_SLAM2::ORBVocabulary *voc,
       cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth,
-      const cv::Mat &ImRGB, cv::Mat _mask)
+      const cv::Mat &ImRGB, cv::Mat _mask, string filename)
       : Frame(imLeft, imRight, timeStamp, extractorLeft, extractorRight, voc, K,
-              distCoef, bf, thDepth, ImRGB, _mask)
+              distCoef, bf, thDepth, ImRGB, _mask, filename)
 
   {
     this->imRight = (imRight);
@@ -104,9 +104,9 @@ namespace defSLAM
                                      cv::Mat &K, cv::Mat &distCoef,
                                      const float &bf, const float &thDepth,
                                      const cv::Mat &ImRGB, const cv::Mat &imDepth,
-                                     bool isDepth, cv::Mat _mask)
+                                     bool isDepth, cv::Mat _mask, string filename)
       : Frame(imGray, timeStamp, extractor, voc, K, distCoef, bf, thDepth, ImRGB,
-              _mask),
+              _mask, filename),
         isDepth(isDepth),
         imDepth(imDepth.clone())
   {

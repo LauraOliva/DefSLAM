@@ -177,7 +177,8 @@ namespace ORB_SLAM2
 
   cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft,
                                     const cv::Mat &imRectRight,
-                                    const double &timestamp)
+                                    const double &timestamp, 
+                                    string filename)
   {
     mImGray = imRectLeft;
     cv::Mat imGrayRight = imRectRight;
@@ -211,7 +212,7 @@ namespace ORB_SLAM2
 
     mCurrentFrame = new Frame(mImGray, imGrayRight, timestamp, mpORBextractorLeft,
                               mpORBextractorRight, mpORBVocabulary, mK, mDistCoef,
-                              mbf, mThDepth, imRectLeft);
+                              mbf, mThDepth, imRectLeft, cv::Mat(), filename);
 
     Track();
 
@@ -219,7 +220,7 @@ namespace ORB_SLAM2
   }
 
   cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB, const cv::Mat &imD,
-                                  const double &timestamp)
+                                  const double &timestamp, string filename)
   {
     mImGray = imRGB;
     cv::Mat imDepth = imD;
@@ -243,7 +244,7 @@ namespace ORB_SLAM2
       imDepth.convertTo(imDepth, CV_32F, mDepthMapFactor);
 
     mCurrentFrame = new Frame(mImGray, imDepth, timestamp, mpORBextractorLeft,
-                              mpORBVocabulary, mK, mDistCoef, mbf, mThDepth);
+                              mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, cv::Mat(), filename);
 
     Track();
 
@@ -251,7 +252,8 @@ namespace ORB_SLAM2
   }
 
   cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im,
-                                       const double &timestamp)
+                                       const double &timestamp, 
+                                       string filename)
   {
 
     mImGray = im.clone();
@@ -273,7 +275,7 @@ namespace ORB_SLAM2
     }
 
     mCurrentFrame = new Frame(mImGray, timestamp, mpORBextractorLeft,
-                              mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, im);
+                              mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, im, cv::Mat(), filename);
 
     Track();
 
@@ -282,7 +284,8 @@ namespace ORB_SLAM2
 
   cv::Mat Tracking::GrabImageMonocular(const cv::Mat &imRectLeft,
                                        const cv::Mat &imRectRight,
-                                       const double &timestamp)
+                                       const double &timestamp,
+                                       string filename)
   {
     mImGray = imRectLeft.clone();
     cv::Mat imGrayRight = imRectRight;
@@ -321,7 +324,7 @@ namespace ORB_SLAM2
 
     mCurrentFrame = new defSLAM::GroundTruthFrame(
         mImGray, imGrayRight, timestamp, mpORBextractorLeft, mpORBextractorRight,
-        mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft);
+        mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft, cv::Mat(), filename);
 
     Track();
 
@@ -330,7 +333,8 @@ namespace ORB_SLAM2
 
   cv::Mat Tracking::GrabImageMonocularGT(const cv::Mat &imRectLeft,
                                          const cv::Mat &imRectRight,
-                                         const double &timestamp, cv::Mat _mask)
+                                         const double &timestamp, cv::Mat _mask, 
+                                         string filename)
   {
     mImGray = imRectLeft.clone();
     cv::Mat imGrayRight = imRectRight;
@@ -368,7 +372,7 @@ namespace ORB_SLAM2
     }
 
     mCurrentFrame = new defSLAM::GroundTruthFrame(mImGray, imGrayRight, timestamp, mpORBextractorLeft,
-                                                  mpORBextractorRight, mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft, _mask);
+                                                  mpORBextractorRight, mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft, _mask, filename);
 
     Track();
 
@@ -391,7 +395,8 @@ namespace ORB_SLAM2
   cv::Mat Tracking::GrabImageMonocularCTGT(const cv::Mat &imRectLeft,
                                            const cv::Mat &imDepth,
                                            const double &timestamp,
-                                           cv::Mat _mask)
+                                           cv::Mat _mask, 
+                                           string filename)
   {
     mImGray = imRectLeft.clone();
     imRectLeft.copyTo(mImRGB);
@@ -425,7 +430,7 @@ namespace ORB_SLAM2
 
     mCurrentFrame = new defSLAM::GroundTruthFrame(
         mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK, mDistCoef,
-        mbf, mThDepth, imRectLeft, imDepth, true, _mask);
+        mbf, mThDepth, imRectLeft, imDepth, true, _mask, filename);
 
     this->Track();
 
@@ -448,7 +453,7 @@ namespace ORB_SLAM2
   }
 
   bool Tracking::RelocateImageMonocular(const cv::Mat &im,
-                                        const double &timestamp)
+                                        const double &timestamp, string filename)
   {
     mImGray = im;
 
@@ -469,11 +474,11 @@ namespace ORB_SLAM2
     if (mState == NOT_INITIALIZED || mState == NO_IMAGES_YET)
       mCurrentFrame =
           new Frame(mImGray, timestamp, mpIniORBextractor, mpORBVocabulary, mK,
-                    mDistCoef, mbf, mThDepth, im);
+                    mDistCoef, mbf, mThDepth, im, cv::Mat(), filename);
     else
       mCurrentFrame =
           new Frame(mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK,
-                    mDistCoef, mbf, mThDepth, im);
+                    mDistCoef, mbf, mThDepth, im, cv::Mat(), filename);
 
     bool bOK = Relocalization();
     mpFrameDrawer->Update(this);

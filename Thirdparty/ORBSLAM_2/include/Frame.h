@@ -43,19 +43,19 @@ namespace ORB_SLAM2
     public:
         Frame();
         //
-        Frame(const cv::Mat &imGray, const double &timeStamp, const cv::Mat &K, const cv::Mat &Tcw, const cv::Mat &distCoef, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat());
+        Frame(const cv::Mat &imGray, const double &timeStamp, const cv::Mat &K, const cv::Mat &Tcw, const cv::Mat &distCoef, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat(), const string &filename="");
 
         // Copy constructor.
         Frame(const Frame &frame);
 
         // Constructor for stereo cameras.
-        Frame(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timeStamp, ORB_SLAM2::ORBextractor *extractorLeft, ORB_SLAM2::ORBextractor *extractorRight, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat());
+        Frame(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timeStamp, ORB_SLAM2::ORBextractor *extractorLeft, ORB_SLAM2::ORBextractor *extractorRight, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat(), const string &filename="");
 
         // Constructor for RGB-D cameras.
-        Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeStamp, ORB_SLAM2::ORBextractor *extractor, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, cv::Mat _mask = cv::Mat());
+        Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeStamp, ORB_SLAM2::ORBextractor *extractor, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, cv::Mat _mask = cv::Mat(), const string &filename="");
 
         // Constructor for Monocular cameras.
-        Frame(const cv::Mat &imGray, const double &timeStamp, ORB_SLAM2::ORBextractor *extractor, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat());
+        Frame(const cv::Mat &imGray, const double &timeStamp, ORB_SLAM2::ORBextractor *extractor, ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, const cv::Mat &ImRGB, cv::Mat _mask = cv::Mat(), const string &filename="");
         //  Frame(const cv::Mat &imGray, const double &timeStamp, ORB_SLAM2::ORBextractor* extractor,ORB_SLAM2::ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth,const cv::Mat &ImRGB, const cv::Mat &ImOut,cv::Mat _mask = cv::Mat());
 
         virtual ~Frame();
@@ -115,6 +115,8 @@ namespace ORB_SLAM2
 
         // Frame timestamp.
         double mTimeStamp;
+
+        string mNameFile;
 
         // Calibration matrix and OpenCV distortion parameters.
         cv::Mat mK;

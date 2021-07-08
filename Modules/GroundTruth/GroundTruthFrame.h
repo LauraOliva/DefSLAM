@@ -55,21 +55,21 @@ namespace defSLAM
                      ORB_SLAM2::ORBextractor *extractorRight,
                      ORB_SLAM2::ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef,
                      const float &bf, const float &thDepth, const cv::Mat &ImRGB,
-                     cv::Mat _mask = cv::Mat());
+                     cv::Mat _mask = cv::Mat(), string filename="");
 
     // Initialization with monocular
     GroundTruthFrame(const cv::Mat &imGray, const double &timeStamp,
                      ORBextractor *extractor, ORBVocabulary *voc, cv::Mat &K,
                      cv::Mat &distCoef, const float &bf, const float &thDepth,
                      const cv::Mat &ImRGB, const cv::Mat &ImRight,
-                     cv::Mat _mask = cv::Mat());
+                     cv::Mat _mask = cv::Mat(), string filename="");
 
     // Initialization with GT
     GroundTruthFrame(const cv::Mat &imGray, const double &timeStamp,
                      ORBextractor *extractor, ORBVocabulary *voc, cv::Mat &K,
                      cv::Mat &distCoef, const float &bf, const float &thDepth,
                      const cv::Mat &ImRGB, const cv::Mat &imDepth, bool isdepth,
-                     cv::Mat _mask = cv::Mat());
+                     cv::Mat _mask = cv::Mat(), string filename="");
 
   public:
     /*****

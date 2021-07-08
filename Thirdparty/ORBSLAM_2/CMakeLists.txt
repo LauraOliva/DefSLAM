@@ -31,5 +31,6 @@ ${Pangolin_LIBRARIES}
 ${CERES_LIBRARIES}
 DBoW2
 g2o
+cnpy
 )
 

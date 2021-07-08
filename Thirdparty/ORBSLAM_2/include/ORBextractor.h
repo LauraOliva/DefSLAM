@@ -26,6 +26,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui.hpp>
 
+#include "Thirdparty/cnpy/cnpy.h"
+
 namespace ORB_SLAM2
 {
 
@@ -58,7 +60,7 @@ public:
     // Mask is ignored in the current implementation.
     void operator()( cv::InputArray image, cv::InputArray mask,
       std::vector<cv::KeyPoint>& keypoints,
-      cv::OutputArray descriptors);
+      cv::OutputArray descriptors, const std::string &ts);
 
     int inline GetLevels(){
         return nlevels;}
@@ -88,15 +90,18 @@ public:
 
 protected:
 
+    // SuperPoint
+	void getKeypoints(std::string filename , std::vector<cv::KeyPoint> & keyPoints);
+	void getdescriptors(std::string filename,cv::Mat & descriptor,int nkeypoints);
+
     void ComputePyramid(cv::Mat image);
 
     void ComputePyramid(cv::Mat image,cv::Mat _Mask);
 
-    void ComputeKeyPointsOctTree(std::vector<std::vector<cv::KeyPoint> >& allKeypoints);
+    void ComputeKeyPointsOctTree(std::vector<std::vector<cv::KeyPoint> >& allKeypoints, const std::string &ts, int &nkeypoints);
     std::vector<cv::KeyPoint> DistributeOctTree(const std::vector<cv::KeyPoint>& vToDistributeKeys, const int &minX,
                                            const int &maxX, const int &minY, const int &maxY, const int &nFeatures, const int &level);
 
-    void ComputeKeyPointsOld(std::vector<std::vector<cv::KeyPoint> >& allKeypoints);
     std::vector<cv::Point> pattern;
 
     int nfeatures;

@@ -40,9 +40,9 @@ namespace ORB_SLAM2
 
   Frame::Frame(const cv::Mat &imGray, const double &timeStamp, const cv::Mat &K,
                const cv::Mat &mTcw, const cv::Mat &distCoef, const cv::Mat &ImRGB,
-               cv::Mat _mask)
+               cv::Mat _mask, const string &filename)
       : mTimeStamp(timeStamp), mK(K.clone()), mDistCoef(distCoef.clone()),
-        ImGray(imGray.clone()), ImRGB(ImRGB.clone()), _mask(_mask.clone())
+        ImGray(imGray.clone()), ImRGB(ImRGB.clone()), _mask(_mask.clone()), mNameFile(filename)
   {
     fx = K.at<float>(0, 0);
     fy = K.at<float>(1, 1);
@@ -76,7 +76,7 @@ namespace ORB_SLAM2
         mvInvScaleFactors(frame.mvInvScaleFactors),
         mvLevelSigma2(frame.mvLevelSigma2),
         mvInvLevelSigma2(frame.mvInvLevelSigma2), ImGray(frame.ImGray.clone()),
-        _mask(frame._mask.clone())
+        _mask(frame._mask.clone()), mNameFile(frame.mNameFile)
   {
     //   cv::imshow("img_last",ImGray);
 
@@ -92,12 +92,12 @@ namespace ORB_SLAM2
                const double &timeStamp, ORBextractor *extractorLeft,
                ORBextractor *extractorRight, ORBVocabulary *voc, cv::Mat &K,
                cv::Mat &distCoef, const float &bf, const float &thDepth,
-               const cv::Mat &ImRGB, cv::Mat _mask)
+               const cv::Mat &ImRGB, cv::Mat _mask, const string &filename)
       : mpORBvocabulary(voc), mpORBextractorLeft(extractorLeft),
         mpORBextractorRight(extractorRight), mTimeStamp(timeStamp), mK(K.clone()),
         mDistCoef(distCoef.clone()), mbf(bf), mThDepth(thDepth),
         mpReferenceKF(static_cast<KeyFrame *>(nullptr)), ImGray(imLeft.clone()),
-        imRight(imRight.clone()), ImRGB(ImRGB.clone()), _mask(_mask.clone())
+        imRight(imRight.clone()), ImRGB(ImRGB.clone()), _mask(_mask.clone()), mNameFile(filename)
   {
     // Frame ID
     mnId = nNextId++;
@@ -158,11 +158,11 @@ namespace ORB_SLAM2
   Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth,
                const double &timeStamp, ORBextractor *extractor,
                ORBVocabulary *voc, cv::Mat &K, cv::Mat &distCoef, const float &bf,
-               const float &thDepth, cv::Mat _mask)
+               const float &thDepth, cv::Mat _mask, const string &filename)
       : mpORBvocabulary(voc), mpORBextractorLeft(extractor),
         mpORBextractorRight(static_cast<ORBextractor *>(nullptr)),
         mTimeStamp(timeStamp), mK(K.clone()), mDistCoef(distCoef.clone()),
-        mbf(bf), mThDepth(thDepth), _mask(_mask.clone())
+        mbf(bf), mThDepth(thDepth), _mask(_mask.clone()), mNameFile(filename)
   {
     // Frame ID
     mnId = nNextId++;
@@ -220,12 +220,12 @@ namespace ORB_SLAM2
   Frame::Frame(const cv::Mat &imGray, const double &timeStamp,
                ORBextractor *extractor, ORBVocabulary *voc, cv::Mat &K,
                cv::Mat &distCoef, const float &bf, const float &thDepth,
-               const cv::Mat &imRGB, cv::Mat _mask)
+               const cv::Mat &imRGB, cv::Mat _mask, const string &filename)
       : mpORBvocabulary(voc), mpORBextractorLeft(extractor),
         mpORBextractorRight(static_cast<ORBextractor *>(nullptr)),
         mTimeStamp(timeStamp), mK(K.clone()), mDistCoef(distCoef.clone()),
         mbf(bf), mThDepth(thDepth), ImGray(imGray.clone()), ImRGB(imRGB.clone()),
-        _mask(_mask.clone())
+        _mask(_mask.clone()), mNameFile(filename)
   {
     // Frame ID
     mnId = nNextId++;
@@ -313,11 +313,11 @@ namespace ORB_SLAM2
 
     if (flag == 0)
     {
-      (*mpORBextractorLeft)(im.clone(), _mask, mvKeys, mDescriptors);
+      (*mpORBextractorLeft)(im.clone(), _mask, mvKeys, mDescriptors, mNameFile);
     }
     else
     {
-      (*mpORBextractorRight)(im.clone(), _mask, mvKeysRight, mDescriptorsRight);
+      (*mpORBextractorRight)(im.clone(), _mask, mvKeysRight, mDescriptorsRight, mNameFile);
     }
   }
 

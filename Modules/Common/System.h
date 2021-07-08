@@ -97,18 +97,18 @@ namespace defSLAM
     // grayscale.
     // Returns the camera pose (empty if tracking fails).
     virtual cv::Mat TrackMonocular(const cv::Mat &im, const double &timestamp,
-                                   const cv::Mat _mask = cv::Mat());
+                                   const cv::Mat _mask = cv::Mat(), const string filename = "");
     // virtual cv::Mat TrackMonocularwithOut(const cv::Mat &im,const cv::Mat
     // &imOut, const double &timestamp,const cv::Mat _mask = cv::Mat());
 
     // Using stereo for calculate the ground truth
     virtual cv::Mat TrackMonocularGT(const cv::Mat &im, const cv::Mat &imRight,
                                      const double &timestamp,
-                                     const cv::Mat _mask = cv::Mat());
+                                     const cv::Mat _mask = cv::Mat(), const string filename = "");
 
     // Using CT for depth image the ground truth (It may work with depth image too)
     cv::Mat TrackMonocularCTGT(const cv::Mat &im, const cv::Mat &CTdepth,
-                               const double &timestamp, const cv::Mat _mask);
+                               const double &timestamp, const cv::Mat _mask, const string filename = "");
 
     // This stops local mapping thread (map building) and performs only camera
     // tracking.

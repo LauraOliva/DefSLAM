@@ -66,25 +66,25 @@ namespace ORB_SLAM2
     // Preprocess the input and call Track(). Extract features and performs stereo
     // matching.
     cv::Mat GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRectRight,
-                            const double &timestamp);
+                            const double &timestamp, string filename);
     cv::Mat GrabImageRGBD(const cv::Mat &imRGB, const cv::Mat &imD,
-                          const double &timestamp);
-    cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp);
+                          const double &timestamp, string filename);
+    cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp, string filename);
     cv::Mat GrabImageMonocular(const cv::Mat &im, const cv::Mat &imRight,
-                               const double &timestamp);
+                               const double &timestamp, string filename);
 
     virtual cv::Mat GrabImageMonocularGT(const cv::Mat &im,
                                          const cv::Mat &imRight,
                                          const double &timestamp,
-                                         cv::Mat _mask = cv::Mat());
+                                         cv::Mat _mask = cv::Mat(), string filename="");
     virtual cv::Mat GrabImageMonocularCTGT(const cv::Mat &im,
                                            const cv::Mat &imDepth,
                                            const double &timestamp,
-                                           cv::Mat _mask = cv::Mat());
+                                           cv::Mat _mask = cv::Mat(), string filename="");
     void SetLocalMapper(LocalMapping *pLocalMapper);
     void SetLoopClosing(LoopClosing *pLoopClosing);
     void SetViewer(Viewer *pViewer);
-    bool RelocateImageMonocular(const cv::Mat &im, const double &timestamp);
+    bool RelocateImageMonocular(const cv::Mat &im, const double &timestamp, string filename);
 
     // Load new settings
     // The focal lenght should be similar or scale prediction will fail when
