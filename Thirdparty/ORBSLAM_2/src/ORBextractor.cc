@@ -785,10 +785,6 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
         int max_it = 1;
         for (int level = 0; level < max_it; ++level)
         {
-//             const int minBorderX = EDGE_THRESHOLD-3;
-//             const int minBorderY = minBorderX;
-//             const int maxBorderX = mvImagePyramid[level].cols-EDGE_THRESHOLD+3;
-//             const int maxBorderY = mvImagePyramid[level].rows-EDGE_THRESHOLD+3;
 
             const int minBorderX = 0;
             const int minBorderY = minBorderX;
@@ -806,115 +802,14 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
             const int wCell = ceil(width/nCols);
             const int hCell = ceil(height/nRows);
 
-            if (/*detector_name == "AKAZE_ORIGINAL"*/true){
-                cv::Mat image;
-                mvImagePyramid[level].rowRange(minBorderY,maxBorderY).colRange(minBorderX,maxBorderX).copyTo(image);
+            cv::Mat image;
+            mvImagePyramid[level].rowRange(minBorderY,maxBorderY).colRange(minBorderX,maxBorderX).copyTo(image);
 
-                akaze_evolution.Feature_Detection(vToDistributeKeys);
+            akaze_evolution.Feature_Detection(vToDistributeKeys);
 
-            }
-            else{ //FAST
-
-                for(int i=0; i<nRows; i++)
-                {
-                    const float iniY =minBorderY+i*hCell;
-                    float maxY = iniY+hCell+6;
-
-                    if(iniY>=maxBorderY-3)
-                        continue;
-                    if(maxY>maxBorderY)
-                        maxY = maxBorderY;
-
-                    for(int j=0; j<nCols; j++)
-                    {
-                        const float iniX =minBorderX+j*wCell;
-                        float maxX = iniX+wCell+6;
-                        if(iniX>=maxBorderX-6)
-                            continue;
-                        if(maxX>maxBorderX)
-                            maxX = maxBorderX;
-
-                        vector<cv::KeyPoint> vKeysCell;
-
-                        FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                            vKeysCell,iniThFAST,true);
-
-                        /*if(bRight && j <= 13){
-                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                vKeysCell,10,true);
-                        }
-                        else if(!bRight && j >= 16){
-                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                vKeysCell,10,true);
-                        }
-                        else{
-                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                vKeysCell,iniThFAST,true);
-                        }*/
+            
 
 
-                        if(vKeysCell.empty())
-                        {
-                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                vKeysCell,minThFAST,true);
-                            /*if(bRight && j <= 13){
-                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                    vKeysCell,5,true);
-                            }
-                            else if(!bRight && j >= 16){
-                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                    vKeysCell,5,true);
-                            }
-                            else{
-                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                                    vKeysCell,minThFAST,true);
-                            }*/
-                        }
-
-                        if(!vKeysCell.empty())
-                        {
-                            for(vector<cv::KeyPoint>::iterator vit=vKeysCell.begin(); vit!=vKeysCell.end();vit++)
-                            {
-                                (*vit).pt.x+=j*wCell;
-                                (*vit).pt.y+=i*hCell;
-                                vToDistributeKeys.push_back(*vit);
-                            }
-                        }
-
-                    }
-                }
-            }
-
-
-
-		if (/*detector_name != "AKAZE" and detector_name != "AKAZE_ORIGINAL"*/ false){
-			vector<KeyPoint> & keypoints = allKeypoints[level];
-			keypoints.reserve(nfeatures);
-			keypoints = DistributeOctTree(vToDistributeKeys, minBorderX, maxBorderX,
-										minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
-
-
-			const int scaledPatchSize = PATCH_SIZE*mvScaleFactor[level];
-			// Add border to coordinates and scale information
-			const int nkps = keypoints.size();
-			for(int i=0; i<nkps ; i++)
-			{
-				keypoints[i].pt.x+=minBorderX;
-				keypoints[i].pt.y+=minBorderY;
-				keypoints[i].octave=level;
-				keypoints[i].size = scaledPatchSize;
-// 				if(extractor_name == "AKAZE" or extractor_name == "AKAZE_ORIGINAL"){
-// 					keypoints[i].pt.x*=mvScaleFactor[level];
-// 					keypoints[i].pt.y*=mvScaleFactor[level];
-// 					if(extractor_name == "AKAZE_ORIGINAL") keypoints[i].octave=int(level/akaze_options.nsublevels);
-// 					keypoints[i].class_id = level;
-// 					keypoints[i].size = akaze_options.derivative_factor*akaze_evolution.get_esigma(level)*2;
-// 				}
-
-			}
-		}
-		else{ // AKAZE
-        
 			for(int level = 0; level < nlevels; level++){
 				vector<KeyPoint> & keypoints = allKeypoints[level];
 				keypoints.reserve(nfeatures);
@@ -925,7 +820,9 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
 					for(vector<cv::KeyPoint>::iterator vit=vToDistributeKeys.begin(); vit!=vToDistributeKeys.end();vit++)
 					{
 
-						if((*vit).octave == level) vKeysLevel.push_back(*vit);
+						if((*vit).octave == level){ 
+                            vKeysLevel.push_back(*vit);
+                        }
 					}
 				}
 
@@ -933,32 +830,9 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
 											minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
 				computeOrientation(mvImagePyramid[0], allKeypoints[level], umax);
 			}
-		}
 
-/*
-            vector<KeyPoint> & keypoints = allKeypoints[level];
-            keypoints.reserve(nfeatures);
-
-            keypoints = DistributeOctTree(vToDistributeKeys, minBorderX, maxBorderX,
-                                          minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
-
-            const int scaledPatchSize = PATCH_SIZE*mvScaleFactor[level];
-
-            // Add border to coordinates and scale information
-            const int nkps = keypoints.size();
-            for(int i=0; i<nkps ; i++)
-            {
-                keypoints[i].pt.x+=minBorderX;
-                keypoints[i].pt.y+=minBorderY;
-                keypoints[i].octave=level;
-                keypoints[i].size = scaledPatchSize;
-            }*/
         }
 
-        // FAST
-//         // compute orientations
-//         for (int level = 0; level < nlevels; ++level)
-//             computeOrientation(mvImagePyramid[level], allKeypoints[level], umax);
     }
 
 void ORBextractor::ComputeKeyPointsOld(std::vector<std::vector<KeyPoint> > &allKeypoints)
