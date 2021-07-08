@@ -209,6 +209,54 @@ namespace ORB_SLAM2
       }
     }
 
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(imRectLeft, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
+
+    // CLAHE AND GREEN CHANNEL
+    cv::cvtColor(imRectRight, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    split(image_clahe, channels);
+    imGrayRight = channels[1]; //green
+
+
     mCurrentFrame = new Frame(mImGray, imGrayRight, timestamp, mpORBextractorLeft,
                               mpORBextractorRight, mpORBVocabulary, mK, mDistCoef,
                               mbf, mThDepth, imRectLeft);
@@ -242,6 +290,34 @@ namespace ORB_SLAM2
     if ((fabs(mDepthMapFactor - 1.0f) > 1e-5) || imDepth.type() != CV_32F)
       imDepth.convertTo(imDepth, CV_32F, mDepthMapFactor);
 
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(imRGB, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
+
     mCurrentFrame = new Frame(mImGray, imDepth, timestamp, mpORBextractorLeft,
                               mpORBVocabulary, mK, mDistCoef, mbf, mThDepth);
 
@@ -271,6 +347,35 @@ namespace ORB_SLAM2
       else
         cv::cvtColor(im, mImGray, cv::COLOR_BGRA2GRAY);
     }
+
+
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(im, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
 
     mCurrentFrame = new Frame(mImGray, timestamp, mpORBextractorLeft,
                               mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, im);
@@ -319,6 +424,53 @@ namespace ORB_SLAM2
       cv::cvtColor(imRectLeft, mImRGB, cv::COLOR_GRAY2RGB);
     }
 
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(imRectLeft, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
+
+    // CLAHE AND GREEN CHANNEL
+    cv::cvtColor(imRectRight, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    split(image_clahe, channels);
+    imGrayRight = channels[1]; //green
+
     mCurrentFrame = new defSLAM::GroundTruthFrame(
         mImGray, imGrayRight, timestamp, mpORBextractorLeft, mpORBextractorRight,
         mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft);
@@ -366,6 +518,53 @@ namespace ORB_SLAM2
     {
       cv::cvtColor(imRectLeft, mImRGB, cv::COLOR_GRAY2RGB);
     }
+
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(imRectLeft, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
+
+    // CLAHE AND GREEN CHANNEL
+    cv::cvtColor(imRectRight, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    split(image_clahe, channels);
+    imGrayRight = channels[1]; //green
 
     mCurrentFrame = new defSLAM::GroundTruthFrame(mImGray, imGrayRight, timestamp, mpORBextractorLeft,
                                                   mpORBextractorRight, mpORBVocabulary, mK, mDistCoef, mbf, mThDepth, imRectLeft, _mask);
@@ -422,6 +621,34 @@ namespace ORB_SLAM2
     {
       cv::cvtColor(imRectLeft, mImRGB, cv::COLOR_GRAY2RGB);
     }
+
+    // CLAHE AND GREEN CHANNEL
+    cv::Mat lab_image;
+    cv::cvtColor(imRectLeft, lab_image, CV_BGR2Lab);
+
+    // Extract the L channel
+    std::vector<cv::Mat> lab_planes(3);
+    cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+
+
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    clahe->setClipLimit(3); // Clip limit = 3 // 2 // 2 //12
+    clahe->setTilesGridSize(cv::Size(8,8)); // Tiles size = 8 // 8 // 3 //3
+    cv::Mat dst;
+    clahe->apply(lab_planes[0], dst);
+
+    // Merge the the color planes back into an Lab image
+    dst.copyTo(lab_planes[0]);
+    cv::merge(lab_planes, lab_image);
+
+    // convert back to RGB
+    cv::Mat image_clahe;
+    cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+
+
+    std::vector<cv::Mat> channels;
+    split(image_clahe, channels);
+    mImGray = channels[1]; //green
 
     mCurrentFrame = new defSLAM::GroundTruthFrame(
         mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK, mDistCoef,

@@ -305,7 +305,7 @@ void AKAZE::Find_Scale_Space_Extrema(std::vector<cv::KeyPoint>& kpts) {
 
   t1 = cv::getTickCount();
 
-  for (size_t i = 2; i < evolution_.size(); i++) {
+  for (size_t i = 0; i < evolution_.size(); i++) {
 // 	if(evolution_[i].octave < options_.omin) continue;
     for (int ix = 1; ix < evolution_[i].Ldet.rows-1; ix++) {
 

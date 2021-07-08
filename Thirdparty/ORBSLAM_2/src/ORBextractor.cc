@@ -414,7 +414,7 @@ ORBextractor::ORBextractor(int _nfeatures, float _scaleFactor, int _nlevels,
 {
     akaze_options.dthreshold = 0.0002;
     akaze_options.soffset = 1.2;
-    akaze_options.omax = nlevels;
+    akaze_options.omax = 8;
     akaze_options.omin = 1;
     akaze_options.nsublevels = 4;
     akaze_options.img_width = 0;
@@ -1157,6 +1157,7 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
 
     Mat image = _image.getMat();
     Mat mask = _mask.getMat();
+    
 
     assert(image.type() == CV_8UC1 );
 
@@ -1204,8 +1205,8 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
             continue;
 
         // preprocess the resized image
-        Mat workingMat = mvImagePyramid[level].clone();
-        GaussianBlur(workingMat, workingMat, Size(7, 7), 2, 2, BORDER_REFLECT_101);
+        Mat workingMat = mvImagePyramidNLS[0].clone();
+        // GaussianBlur(workingMat, workingMat, Size(7, 7), 2, 2, BORDER_REFLECT_101);
 
         // Compute the descriptors
         Mat desc = descriptors.rowRange(offset, offset + nkeypointsLevel);
@@ -1320,7 +1321,7 @@ void ORBextractor::ComputePyramid(cv::Mat image,cv::Mat _Mask)
 
         // t1 = cv::getTickCount();
 
-        // mvImagePyramid = akaze_evolution.Get_Scale_Space();
+        mvImagePyramidNLS = akaze_evolution.Get_Scale_Space();
 
 
         // t2 = cv::getTickCount();

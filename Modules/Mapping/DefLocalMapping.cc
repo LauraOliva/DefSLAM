@@ -175,6 +175,7 @@ namespace defSLAM
     {
       std::cout << "NORMAL ESTIMATOR IN - ";
       NormalEstimator NormalEstimator_(this->warpDB_);
+      std::cout << "In the middle" << endl;
       NormalEstimator_.ObtainK1K2();
       std::cout << " NORMAL ESTIMATOR OUT";
     }

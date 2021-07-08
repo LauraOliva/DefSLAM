@@ -3,8 +3,8 @@ close all; clear all;
 l = [];
 
 %% Load files from folder
-path ='/home/laura/ExperimentsResults/DefSLAM/Hamlyn/abdominal/';
-name = "abdominal";
+path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/levels/';
+name = "akaze-clahe-8";
 l = [l name];
 
 % Timestamps = ni, strat=200
@@ -31,28 +31,30 @@ legend(l);
 nimages=start+length(data_scale)-1;
 
 %% Matches
-data_matches = dlmread(matches_filename);
-figure(2);
-% Inliers
-plot(data_matches(:,1), data_matches(:,2), '-r');
-hold on;
-% Outliers
-plot(data_matches(:,1), data_matches(:,3), '-g');
-hold on;
-% Map Points
-plot(data_matches(:,1), data_matches(:,4), '-b');
-grid on;
+% data_matches = dlmread(matches_filename);
+% figure(2);
+% % Inliers
+% plot(data_matches(:,1), data_matches(:,2), '-r');
+% hold on;
+% % Outliers
+% plot(data_matches(:,1), data_matches(:,3), '-g');
+% hold on;
+% % Map Points
+% plot(data_matches(:,1), data_matches(:,4), '-b');
+% grid on;
 
-title("Matches");
-ylabel("#Points");
-xlabel("#Frame");
+% title("Matches");
+% ylabel("#Points");
+% xlabel("#Frame");
 
-legend(["Inliers", "Outliers", "Map Points"]);
+% legend(["Inliers", "Outliers", "Map Points"]);
 
 
 %% Matches - ratio
+data_matches = dlmread(matches_filename);
 ratio_matches = data_matches(:,2) ./ data_matches(:,4);
 figure(3);
+hold on;
 plot(ratio_matches);
 grid on;
 
@@ -60,6 +62,8 @@ title("Matches - ratio");
 ylabel("Fraction of matched map points");
 xlabel("#Frame");
 ylim([0 1]')
+
+legend(l);
 
 
 %% RMS error - GT
@@ -85,10 +89,15 @@ for i = start:1:nimages
 end
 
 figure(4);
+hold on;
 plot(data_error_gt);
 title("GT error");
 ylabel("3D RMS error(mm)");
 xlabel("#Frame");
+
+
+
+legend(l);
 
 %% Evolution of the error
 
@@ -133,6 +142,7 @@ for i = 0:1:nframes-1
 end
 
 figure(5);
+hold on;
 frames = [0:10:(nframes-1)*10];
 stairs(frames, angiso_data, '-r');
 hold on;

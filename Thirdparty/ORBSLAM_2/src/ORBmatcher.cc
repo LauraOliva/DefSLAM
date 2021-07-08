@@ -32,8 +32,8 @@ using namespace std;
 namespace ORB_SLAM2
 {
 
-  const int ORBmatcher::TH_HIGH = 75; // 100
-  const int ORBmatcher::TH_LOW = 50;  // 50
+  const int ORBmatcher::TH_HIGH = 80; // 100
+  const int ORBmatcher::TH_LOW = 40;  // 50
   const int ORBmatcher::HISTO_LENGTH = 30;
 
   ORBmatcher::ORBmatcher(float nnratio, bool checkOri)
@@ -945,7 +945,7 @@ namespace ORB_SLAM2
           const float er = ur - kpr;
           const float e2 = ex * ex + ey * ey + er * er;
 
-          if (e2 * pKF->mvInvLevelSigma2[kpLevel] > 7.8)
+          if (e2 * pKF->mvInvLevelSigma2[kpLevel] > 0.78)
             continue;
         }
         else
@@ -956,7 +956,7 @@ namespace ORB_SLAM2
           const float ey = v - kpy;
           const float e2 = ex * ex + ey * ey;
 
-          if (e2 * pKF->mvInvLevelSigma2[kpLevel] > 5.99)
+          if (e2 * pKF->mvInvLevelSigma2[kpLevel] > 0.599)
             continue;
         }
 

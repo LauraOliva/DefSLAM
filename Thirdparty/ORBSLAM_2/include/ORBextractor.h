@@ -84,6 +84,7 @@ public:
     }
 
     std::vector<cv::Mat> mvImagePyramid;
+    std::vector<cv::Mat> mvImagePyramidNLS;
 
     std::vector<cv::Mat> mvImageMask;
 
