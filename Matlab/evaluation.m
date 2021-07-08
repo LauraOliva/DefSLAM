@@ -3,8 +3,8 @@ close all; clear all;
 l = [];
 
 %% Load files from folder
-path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/levels/';
-name = "akaze-clahe-8";
+path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
+name = "akaze";
 l = [l name];
 
 % Timestamps = ni, strat=200
@@ -68,7 +68,7 @@ legend(l);
 
 %% RMS error - GT
 data_error_gt = [];
-for i = start:1:nimages
+for i = start:1:963
     % ErrorAnglso: angular RMS between the angle estimated by the IsoNRSfM and the angle error agter fitting a surface to the normals estimated.
     
     % ErrorAngSfN

@@ -1089,13 +1089,13 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
         offset += nkeypointsLevel;
 
         // Scale keypoint coordinates
-        if (level != 0)
-        {
-            float scale = mvScaleFactor[level]; //getScale(level, firstLevel, scaleFactor);
-            for (vector<KeyPoint>::iterator keypoint = keypoints.begin(),
-                 keypointEnd = keypoints.end(); keypoint != keypointEnd; ++keypoint)
-                keypoint->pt *= scale;
-        }
+        // if (level != 0)
+        // {
+        //     float scale = mvScaleFactor[level]; //getScale(level, firstLevel, scaleFactor);
+        //     for (vector<KeyPoint>::iterator keypoint = keypoints.begin(),
+        //          keypointEnd = keypoints.end(); keypoint != keypointEnd; ++keypoint)
+        //         keypoint->pt *= scale;
+        // }
         // And add the keypoints to the output
         _keypoints.insert(_keypoints.end(), keypoints.begin(), keypoints.end());
     }
