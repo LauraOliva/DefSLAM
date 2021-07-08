@@ -4,8 +4,10 @@ l = [];
 
 %% Paths
 
-path_orb = '/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_orginal/';
-path_ak = '/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
+path_orb = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/exp_original/";
+path_ak = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/exp_ak/";
+paths = [path_orb path_ak];
+leg = ["ORB" "A-KAZE"];
 
 %% Load files from folder
 path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
@@ -100,9 +102,42 @@ title("GT error");
 ylabel("3D RMS error(mm)");
 xlabel("#Frame");
 
+%% RMS error - Boxplot
 
+total_gt = [];
+groups = [];
 
-legend(l);
+for p = 1:1:2
+    path_p = paths(p)
+    data_error_gt = [];
+    for i = 200:1:963
+        % ErrorAnglso: angular RMS between the angle estimated by the IsoNRSfM and the angle error agter fitting a surface to the normals estimated.
+        
+        % ErrorAngSfN
+        
+        % ErrorGTs: we recover the scale per frame and then we estimate the RMS error between both the scaled surface and the GT surface.
+        % One file per keyframe, one line per map point
+        % Error of the point in that KF
+        error_gt_filename = path_p + "ErrorGTs" + num2str(i, '%05d') + ".txt"; 
+        %std::cout << "Mean Error Surf : " << acc * invc << " " << Error.size() << " "
+        %          << posMono_.size() << std::endl;
+        % acc = sum(errors)
+        % inv = 1 / num_map_points
+
+        data_error_gt_i = dlmread(error_gt_filename);
+        acc = sum(data_error_gt_i);
+        data_error_gt = [data_error_gt; acc/length(data_error_gt_i)];
+
+    end
+
+    total_gt = [total_gt; data_error_gt];
+    groups = [groups; repmat({leg(p)},length(data_error_gt),1)];
+
+end
+
+figure(4);
+boxplot(total_gt, groups);
+xtickangle(45);
 
 %% Evolution of the error
 
