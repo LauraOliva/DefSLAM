@@ -412,6 +412,19 @@ ORBextractor::ORBextractor(int _nfeatures, float _scaleFactor, int _nlevels,
     nfeatures(_nfeatures), scaleFactor(_scaleFactor), nlevels(_nlevels),
     iniThFAST(_iniThFAST), minThFAST(_minThFAST)
 {
+    akaze_options.dthreshold = 0.0002;
+    akaze_options.soffset = 1.2;
+    akaze_options.omax = nlevels;
+    akaze_options.omin = 1;
+    akaze_options.nsublevels = 4;
+    akaze_options.img_width = 0;
+    akaze_options.img_height = 0;
+    akaze_options.diffusivity = DIFFUSIVITY_TYPE(1);
+    akaze_options.descriptor = DESCRIPTOR_TYPE(5);
+
+    scaleFactor = _scaleFactor;
+    nlevels = akaze_options.omax;
+
     mvScaleFactor.resize(nlevels);
     mvLevelSigma2.resize(nlevels);
     mvScaleFactor[0]=1.0f;
@@ -762,99 +775,191 @@ vector<cv::KeyPoint> ORBextractor::DistributeOctTree(const vector<cv::KeyPoint>&
     return vResultKeys;
 }
 
+
 void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoints)
-{
-    allKeypoints.resize(nlevels);
-
-    const float W = 30;
-
-    for (int level = 0; level < nlevels; ++level)
     {
-        const int minBorderX = EDGE_THRESHOLD-3;
-        const int minBorderY = minBorderX;
-        const int maxBorderX = mvImagePyramid[level].cols-EDGE_THRESHOLD+3;
-        const int maxBorderY = mvImagePyramid[level].rows-EDGE_THRESHOLD+3;
+        allKeypoints.resize(nlevels);
 
-        vector<cv::KeyPoint> vToDistributeKeys;
-        vToDistributeKeys.reserve(nfeatures*10);
+        const float W = 30;
 
-        const float width = (maxBorderX-minBorderX);
-        const float height = (maxBorderY-minBorderY);
-
-        const int nCols = width/W;
-        const int nRows = height/W;
-        const int wCell = ceil(width/nCols);
-        const int hCell = ceil(height/nRows);
-
-        for(int i=0; i<nRows; i++)
+        int max_it = 1;
+        for (int level = 0; level < max_it; ++level)
         {
-            const float iniY =minBorderY+i*hCell;
-            float maxY = iniY+hCell+6;
+//             const int minBorderX = EDGE_THRESHOLD-3;
+//             const int minBorderY = minBorderX;
+//             const int maxBorderX = mvImagePyramid[level].cols-EDGE_THRESHOLD+3;
+//             const int maxBorderY = mvImagePyramid[level].rows-EDGE_THRESHOLD+3;
 
-            if(iniY>=maxBorderY-3)
-                continue;
-            if(maxY>maxBorderY)
-                maxY = maxBorderY;
+            const int minBorderX = 0;
+            const int minBorderY = minBorderX;
+            const int maxBorderX = mvImagePyramid[level].cols;
+            const int maxBorderY = mvImagePyramid[level].rows;
 
-            for(int j=0; j<nCols; j++)
-            {
-                const float iniX =minBorderX+j*wCell;
-                float maxX = iniX+wCell+6;
-                if(iniX>=maxBorderX-6)
-                    continue;
-                if(maxX>maxBorderX)
-                    maxX = maxBorderX;
+            vector<cv::KeyPoint> vToDistributeKeys;
+            vToDistributeKeys.reserve(nfeatures*10);
 
-                vector<cv::KeyPoint> vKeysCell;
-                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                     vKeysCell,iniThFAST,true);
-                if (mvImageMask.size()>0){
-                       KeyPointsFilter::runByPixelsMask( vKeysCell, mvImageMask[level].rowRange(iniY,maxY).colRange(iniX,maxX) );
-                }
-                if(vKeysCell.empty())
+            const float width = (maxBorderX-minBorderX);
+            const float height = (maxBorderY-minBorderY);
+
+            const int nCols = width/W;
+            const int nRows = height/W;
+            const int wCell = ceil(width/nCols);
+            const int hCell = ceil(height/nRows);
+
+            if (/*detector_name == "AKAZE_ORIGINAL"*/true){
+                cv::Mat image;
+                mvImagePyramid[level].rowRange(minBorderY,maxBorderY).colRange(minBorderX,maxBorderX).copyTo(image);
+
+                akaze_evolution.Feature_Detection(vToDistributeKeys);
+
+            }
+            else{ //FAST
+
+                for(int i=0; i<nRows; i++)
                 {
-                    FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
-                         vKeysCell,minThFAST,true);
-                    if (mvImageMask.size()>0){
-                        KeyPointsFilter::runByPixelsMask( vKeysCell, mvImageMask[level].rowRange(iniY,maxY).colRange(iniX,maxX) );
-                    }
-                }
+                    const float iniY =minBorderY+i*hCell;
+                    float maxY = iniY+hCell+6;
 
-                if(!vKeysCell.empty())
-                {
-                    for(vector<cv::KeyPoint>::iterator vit=vKeysCell.begin(); vit!=vKeysCell.end();vit++)
+                    if(iniY>=maxBorderY-3)
+                        continue;
+                    if(maxY>maxBorderY)
+                        maxY = maxBorderY;
+
+                    for(int j=0; j<nCols; j++)
                     {
-                        (*vit).pt.x+=j*wCell;
-                        (*vit).pt.y+=i*hCell;
-                        vToDistributeKeys.push_back(*vit);
+                        const float iniX =minBorderX+j*wCell;
+                        float maxX = iniX+wCell+6;
+                        if(iniX>=maxBorderX-6)
+                            continue;
+                        if(maxX>maxBorderX)
+                            maxX = maxBorderX;
+
+                        vector<cv::KeyPoint> vKeysCell;
+
+                        FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                            vKeysCell,iniThFAST,true);
+
+                        /*if(bRight && j <= 13){
+                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                vKeysCell,10,true);
+                        }
+                        else if(!bRight && j >= 16){
+                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                vKeysCell,10,true);
+                        }
+                        else{
+                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                vKeysCell,iniThFAST,true);
+                        }*/
+
+
+                        if(vKeysCell.empty())
+                        {
+                            FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                vKeysCell,minThFAST,true);
+                            /*if(bRight && j <= 13){
+                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                    vKeysCell,5,true);
+                            }
+                            else if(!bRight && j >= 16){
+                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                    vKeysCell,5,true);
+                            }
+                            else{
+                                FAST(mvImagePyramid[level].rowRange(iniY,maxY).colRange(iniX,maxX),
+                                    vKeysCell,minThFAST,true);
+                            }*/
+                        }
+
+                        if(!vKeysCell.empty())
+                        {
+                            for(vector<cv::KeyPoint>::iterator vit=vKeysCell.begin(); vit!=vKeysCell.end();vit++)
+                            {
+                                (*vit).pt.x+=j*wCell;
+                                (*vit).pt.y+=i*hCell;
+                                vToDistributeKeys.push_back(*vit);
+                            }
+                        }
+
                     }
                 }
             }
+
+
+
+		if (/*detector_name != "AKAZE" and detector_name != "AKAZE_ORIGINAL"*/ false){
+			vector<KeyPoint> & keypoints = allKeypoints[level];
+			keypoints.reserve(nfeatures);
+			keypoints = DistributeOctTree(vToDistributeKeys, minBorderX, maxBorderX,
+										minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
+
+
+			const int scaledPatchSize = PATCH_SIZE*mvScaleFactor[level];
+			// Add border to coordinates and scale information
+			const int nkps = keypoints.size();
+			for(int i=0; i<nkps ; i++)
+			{
+				keypoints[i].pt.x+=minBorderX;
+				keypoints[i].pt.y+=minBorderY;
+				keypoints[i].octave=level;
+				keypoints[i].size = scaledPatchSize;
+// 				if(extractor_name == "AKAZE" or extractor_name == "AKAZE_ORIGINAL"){
+// 					keypoints[i].pt.x*=mvScaleFactor[level];
+// 					keypoints[i].pt.y*=mvScaleFactor[level];
+// 					if(extractor_name == "AKAZE_ORIGINAL") keypoints[i].octave=int(level/akaze_options.nsublevels);
+// 					keypoints[i].class_id = level;
+// 					keypoints[i].size = akaze_options.derivative_factor*akaze_evolution.get_esigma(level)*2;
+// 				}
+
+			}
+		}
+		else{ // AKAZE
+        
+			for(int level = 0; level < nlevels; level++){
+				vector<KeyPoint> & keypoints = allKeypoints[level];
+				keypoints.reserve(nfeatures);
+
+				vector<cv::KeyPoint> vKeysLevel;
+				if(!vToDistributeKeys.empty())
+				{
+					for(vector<cv::KeyPoint>::iterator vit=vToDistributeKeys.begin(); vit!=vToDistributeKeys.end();vit++)
+					{
+
+						if((*vit).octave == level) vKeysLevel.push_back(*vit);
+					}
+				}
+
+				keypoints = DistributeOctTree(vKeysLevel, minBorderX, maxBorderX,
+											minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
+				computeOrientation(mvImagePyramid[0], allKeypoints[level], umax);
+			}
+		}
+
+/*
+            vector<KeyPoint> & keypoints = allKeypoints[level];
+            keypoints.reserve(nfeatures);
+
+            keypoints = DistributeOctTree(vToDistributeKeys, minBorderX, maxBorderX,
+                                          minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
+
+            const int scaledPatchSize = PATCH_SIZE*mvScaleFactor[level];
+
+            // Add border to coordinates and scale information
+            const int nkps = keypoints.size();
+            for(int i=0; i<nkps ; i++)
+            {
+                keypoints[i].pt.x+=minBorderX;
+                keypoints[i].pt.y+=minBorderY;
+                keypoints[i].octave=level;
+                keypoints[i].size = scaledPatchSize;
+            }*/
         }
 
-        vector<KeyPoint> & keypoints = allKeypoints[level];
-        keypoints.reserve(nfeatures);
-
-        keypoints = DistributeOctTree(vToDistributeKeys, minBorderX, maxBorderX,
-                                      minBorderY, maxBorderY,mnFeaturesPerLevel[level], level);
-
-        const int scaledPatchSize = PATCH_SIZE*mvScaleFactor[level];
-
-        // Add border to coordinates and scale information
-        const int nkps = keypoints.size();
-        for(int i=0; i<nkps ; i++)
-        {
-            keypoints[i].pt.x+=minBorderX;
-            keypoints[i].pt.y+=minBorderY;
-            keypoints[i].octave=level;
-            keypoints[i].size = scaledPatchSize;
-        }
+        // FAST
+//         // compute orientations
+//         for (int level = 0; level < nlevels; ++level)
+//             computeOrientation(mvImagePyramid[level], allKeypoints[level], umax);
     }
-
-    // compute orientations
-    for (int level = 0; level < nlevels; ++level)
-        computeOrientation(mvImagePyramid[level], allKeypoints[level], umax);
-}
 
 void ORBextractor::ComputeKeyPointsOld(std::vector<std::vector<KeyPoint> > &allKeypoints)
 {
@@ -1057,12 +1162,16 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
 
     // Pre-compute the scale pyramid
     if (_mask.empty()){
+        //ComputePyramidNonLinearSpace(image);
+        ComputePyramidNonLinearSpace(image);
         ComputePyramid(image);
    }
     else
     {
         assert(mask.type() == CV_8UC1 );
-        ComputePyramid(image,mask);
+        ComputePyramidNonLinearSpace(image);
+        //ComputePyramidNonLinearSpace(image);
+        ComputePyramid(image, mask);
     }
 
     vector < vector<KeyPoint> > allKeypoints;
@@ -1182,5 +1291,43 @@ void ORBextractor::ComputePyramid(cv::Mat image,cv::Mat _Mask)
     }
 
 }
+
+    void ORBextractor::ComputePyramidNonLinearSpace(cv::Mat image)
+    {
+
+        double t1 = 0.0, t2 = 0.0, total = 0.0;
+
+        t1 = cv::getTickCount();
+
+        if(akaze_options.img_width == 0){
+            akaze_options.img_width = image.cols;
+            akaze_options.img_height = image.rows;
+
+            akaze_evolution.set_akaze_options(akaze_options);
+        }
+
+        cv::Mat img_32;
+        image.convertTo(img_32,CV_32F,1.0/255.0,0);
+
+        akaze_evolution.Create_Nonlinear_Scale_Space(img_32);
+
+
+
+        // t2 = cv::getTickCount();
+        // total = 1000.0*(t2-t1) / cv::getTickFrequency();
+
+        // cout << "Create non linear scalar space: " << total << endl;
+
+        // t1 = cv::getTickCount();
+
+        // mvImagePyramid = akaze_evolution.Get_Scale_Space();
+
+
+        // t2 = cv::getTickCount();
+        // total = 1000.0*(t2-t1) / cv::getTickFrequency();
+
+        // cout << "Get space: " << total << endl;
+
+    }
 
 } //namespace ORB_SLAM

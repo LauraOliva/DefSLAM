@@ -25,6 +25,7 @@
 #include <list>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui.hpp>
+#include "Thirdparty/akaze/src/AKAZE.h"
 
 namespace ORB_SLAM2
 {
@@ -87,12 +88,17 @@ public:
     std::vector<cv::Mat> mvImageMask;
 
 protected:
+    // AKAZE
+	AKAZEOptions akaze_options;
+	libAKAZE::AKAZE akaze_evolution;
 
     void ComputePyramid(cv::Mat image);
 
     void ComputePyramid(cv::Mat image,cv::Mat _Mask);
 
     void ComputeKeyPointsOctTree(std::vector<std::vector<cv::KeyPoint> >& allKeypoints);
+
+    void ComputePyramidNonLinearSpace(cv::Mat image);
     std::vector<cv::KeyPoint> DistributeOctTree(const std::vector<cv::KeyPoint>& vToDistributeKeys, const int &minX,
                                            const int &maxX, const int &minY, const int &maxY, const int &nFeatures, const int &level);
 

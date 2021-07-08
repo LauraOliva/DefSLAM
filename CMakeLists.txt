@@ -74,6 +74,7 @@ ${SRC_DEFSLAM_FILES}
 )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/akaze)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/g2o)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/BBS)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Thirdparty/ORBSLAM_2)
@@ -89,6 +90,7 @@ g2o
 BBS
 ORBSLAM
 ToolsPCL
+AKAZE
 )
  
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Apps)
