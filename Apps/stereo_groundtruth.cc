@@ -111,6 +111,7 @@ int main(int argc, char **argv)
 
   // Main loop
   size_t start = 200;
+  size_t counter = 0;
   cv::Mat imLeft, imRight, imLeftRect, imRightRect;
   for (size_t ni = start; ni < nImages; ni++)
   {
@@ -143,8 +144,12 @@ int main(int argc, char **argv)
     }
 
     cv::Mat _mask(imLeftRect.rows, imLeftRect.cols, CV_8UC1, cv::Scalar(255));
-
-    SLAM.TrackMonocularGT(imLeftRect, imRightRect, ni, _mask, string(vstrImageLeft[ni]));
+    stringstream ss;
+    ss << std::internal << std::setfill('0') << std::setw(5)
+        << uint(counter);
+    counter++;
+    cout << "lalala " << ss.str() << endl;
+    SLAM.TrackMonocularGT(imLeftRect, imRightRect, ni, _mask, ss.str());
   }
 
   // Stop all threads

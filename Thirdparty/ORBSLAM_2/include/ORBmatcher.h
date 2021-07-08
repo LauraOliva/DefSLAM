@@ -38,7 +38,7 @@ public:
   ORBmatcher(float nnratio = 0.6, bool checkOri = true);
 
   // Computes the Hamming distance between two ORB descriptors
-  static int DescriptorDistance(const cv::Mat &a, const cv::Mat &b);
+  static double DescriptorDistance(const cv::Mat &a, const cv::Mat &b);
 
   // Search matches between Frame keypoints and projected MapPoints. Returns
   // number of matches
@@ -54,7 +54,7 @@ public:
 
   int SearchByProjection(Frame &CurrentFrame, KeyFrame *pKF,
                          const std::set<MapPoint *> &sAlreadyFound,
-                         const float th, const int ORBdist);
+                         const float th, const double ORBdist);
 
   // Project MapPoints using a Similarity Transformation and search matches.
   // Used in loop detection (Loop Closing)

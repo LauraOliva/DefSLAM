@@ -796,7 +796,7 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
         const int hCell = ceil(height/nRows);
 
         stringstream f_kpts;
-        string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/superpoint/";
+        string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/superpoint/";
         f_kpts << path << ts.substr(0, ts.find("."))  << "_kpts.npy";
         getKeypoints(f_kpts.str(), vToDistributeKeys);
         nkeypoints = vToDistributeKeys.size();
@@ -839,7 +839,7 @@ static void computeDescriptors(const Mat& image, vector<KeyPoint>& keypoints, Ma
 }
 
 void ORBextractor::getKeypoints(std::string filename , std::vector<cv::KeyPoint> & keyPoints){
-
+    cout << "Keypoints filename " << filename << endl;
     cnpy::NpyArray arr = cnpy::npy_load(filename);
     int nkeypoints = arr.shape[0];
 
@@ -858,6 +858,7 @@ void ORBextractor::getKeypoints(std::string filename , std::vector<cv::KeyPoint>
 }
 
 void ORBextractor::getdescriptors(std::string filename,cv::Mat & descriptor,int nkeypoints){
+    cout << "Desc filename " << filename << endl;
     std::ifstream getfile(filename);
     int i = 0;
     while(!getfile.eof())
@@ -913,7 +914,7 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
             nkeypoints += (int)allKeypoints[level].size();
 
 
-		string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/superpoint/";
+		string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/superpoint/";
 		stringstream f_desc;
 		Mat all_desc = cv::Mat(nkeypoints2, 256, CV_32F);
 		Mat filter_desc = cv::Mat(nkeypoints2, 256, CV_32F);

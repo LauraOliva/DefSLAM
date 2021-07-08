@@ -23,12 +23,13 @@
 #define ORBVOCABULARY_H
 
 #include"Thirdparty/DBoW2/DBoW2/FORB.h"
+#include"Thirdparty/DBoW2/DBoW2/FSUPER.h"
 #include"Thirdparty/DBoW2/DBoW2/TemplatedVocabulary.h"
 
 namespace ORB_SLAM2
 {
 
-typedef DBoW2::TemplatedVocabulary<DBoW2::FORB::TDescriptor, DBoW2::FORB>
+typedef DBoW2::TemplatedVocabulary<DBoW2::FSUPER::TDescriptor, DBoW2::FSUPER>
   ORBVocabulary;
 
 } //namespace ORB_SLAM

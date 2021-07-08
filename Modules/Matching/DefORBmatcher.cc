@@ -219,7 +219,7 @@ namespace defSLAM
         continue;
 
       const cv::Mat &d1 = dKF->mDescriptors.row(listMapPoints[i]);
-      int bestDist = TH_LOW;
+      double bestDist = TH_LOW;
       int bestIdx2 = -1;
       float th = 2;
       const auto &features = dKF2->GetFeaturesInArea(x, y, th);
@@ -231,7 +231,7 @@ namespace defSLAM
           continue;
 
         const cv::Mat &d2 = dKF2->mDescriptors.row(features[j]);
-        const int dist = DescriptorDistance(d1, d2);
+        const double dist = DescriptorDistance(d1, d2);
 
         if (dist < TH_LOW && dist < bestDist)
         {
@@ -338,7 +338,7 @@ namespace defSLAM
 
           const cv::Mat dMP = pMP->GetDescriptor();
 
-          int bestDist = 256;
+          double bestDist = 256;
           int bestIdx2 = -1;
 
           for (vector<size_t>::const_iterator vit = vIndices2.begin(),
@@ -360,7 +360,7 @@ namespace defSLAM
 
             const cv::Mat &d = CurrentFrame.mDescriptors.row(i2);
 
-            const int dist = DescriptorDistance(dMP, d);
+            const double dist = DescriptorDistance(dMP, d);
 
             if (dist < bestDist)
             {

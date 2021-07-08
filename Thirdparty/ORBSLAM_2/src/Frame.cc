@@ -574,7 +574,7 @@ namespace ORB_SLAM2
     mvuRight = vector<float>(N, -1.0f);
     mvDepth = vector<float>(N, -1.0f);
 
-    const int thOrbDist = (ORBmatcher::TH_HIGH + ORBmatcher::TH_LOW) / 2;
+    const double thOrbDist = (ORBmatcher::TH_HIGH + ORBmatcher::TH_LOW) / 2;
 
     const int nRows = mpORBextractorLeft->mvImagePyramid[0].rows;
 
@@ -625,7 +625,7 @@ namespace ORB_SLAM2
       if (maxU < 0)
         continue;
 
-      int bestDist = ORBmatcher::TH_HIGH;
+      double bestDist = ORBmatcher::TH_HIGH;
       size_t bestIdxR = 0;
 
       const cv::Mat &dL = mDescriptors.row(iL);
@@ -644,7 +644,7 @@ namespace ORB_SLAM2
         if (uR >= minU && uR <= maxU)
         {
           const cv::Mat &dR = mDescriptorsRight.row(iR);
-          const int dist = ORBmatcher::DescriptorDistance(dL, dR);
+          const double dist = ORBmatcher::DescriptorDistance(dL, dR);
 
           if (dist < bestDist)
           {
