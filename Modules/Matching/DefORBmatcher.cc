@@ -361,7 +361,6 @@ namespace defSLAM
             const cv::Mat &d = CurrentFrame.mDescriptors.row(i2);
 
             const double dist = DescriptorDistance(dMP, d);
-
             if (dist < bestDist)
             {
               bestDist = dist;

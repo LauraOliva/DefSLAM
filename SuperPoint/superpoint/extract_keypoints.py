@@ -194,7 +194,7 @@ if __name__ == '__main__':
 		print(ts)
 		# ts = "image"+str(i+1)
 		ts = ts.rstrip("\n")
-		#np.savetxt(open(opt.output_dir + "/" + ts + "_kpts.txt", 'wb'), np.asarray(kpts))
+		np.savetxt(open(opt.output_dir + "/" + ts + "_kpts.txt", 'wb'), np.asarray(kpts))
 		np.save(open(opt.output_dir + "/" + ts + "_kpts.npy", 'wb'), np.asarray(kpts))
 		# print(ts)
 		# print(desc.shape)

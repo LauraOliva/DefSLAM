@@ -796,7 +796,7 @@ void ORBextractor::ComputeKeyPointsOctTree(vector<vector<KeyPoint> >& allKeypoin
         const int hCell = ceil(height/nRows);
 
         stringstream f_kpts;
-        string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/superpoint/";
+        string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/sp/";
         f_kpts << path << ts.substr(0, ts.find("."))  << "_kpts.npy";
         getKeypoints(f_kpts.str(), vToDistributeKeys);
         nkeypoints = vToDistributeKeys.size();
@@ -841,22 +841,56 @@ static void computeDescriptors(const Mat& image, vector<KeyPoint>& keypoints, Ma
 
 void ORBextractor::getKeypoints(std::string filename , std::vector<cv::KeyPoint> & keyPoints){
     // cout << "Keypoints filename " << filename << endl;
-    cnpy::NpyArray arr = cnpy::npy_load(filename);
-    int nkeypoints = arr.shape[0];
+    //     ifstream getfile(filename);
+	// 	int i = 0;
+    //    while(!getfile.eof())
+    //     {
+    //         string s;
+    //         getline(getfile,s);
+    //         if(!s.empty())
+    //         {
+    //             stringstream ss;
+    //             ss << s;
+    //             float t_x, t_y, t_size, t_angle, t_response;
+	// 			int t_octave, t_class_id;
+    //             ss >> t_x;
+    //             ss >> t_y;
 
-    for(int i = 0; i < nkeypoints; i++){
-        float x = arr.data<float>()[i*2];
-        // x = x*0.76;
-        float y = arr.data<float>()[i*2 + 1];//*0.808;
-        cv::KeyPoint kp(x,y,1);
-        kp.octave = 0;
-        kp.class_id = i;
+	// 			// ss >> t_size;
+	// 			// ss >> t_angle;
+	// 			// ss >> t_response;
+	// 			// ss >> t_octave;
+	// 			// ss >> t_class_id;
+    //             // cv::KeyPoint keyPoint (t_x,t_y,t_size, t_angle, t_response, t_octave, i);
+    //             cv::KeyPoint kp(t_x,t_y,1);
+    //             kp.octave = 0;
+    //             kp.class_id = i;
+    // // 			cout << kp.octave << endl;
+    //             keyPoints.push_back(kp);
+    //             i++;
+    //         }
+    //     }
+
+    //     cout << "N" << keyPoints.size() << endl;
+
+     cnpy::NpyArray arr = cnpy::npy_load(filename);
+		int nkeypoints = arr.shape[0];
+
+		for(int i = 0; i < nkeypoints; i++){
+			float x = arr.data<float>()[i*2];
+			// x = x*0.76;
+			float y = arr.data<float>()[i*2 + 1];//*0.808;
+			cv::KeyPoint kp(x,y,1);
+            // cout << x << ", " << y << endl;
+			kp.octave = 0;
+			kp.class_id = i;
 // 			cout << kp.octave << endl;
-        keyPoints.push_back(kp);
+			keyPoints.push_back(kp);
 
 
-    }
-    cout << "N keyporints " << nkeypoints << endl;
+		}
+
+
 }
 
 void ORBextractor::getdescriptors(std::string filename,cv::Mat & descriptor,int nkeypoints){
@@ -916,7 +950,7 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
             nkeypoints += (int)allKeypoints[level].size();
 
 
-		string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/superpoint/";
+		string path = "/home/laura/Datasets/Hamlyn/sequence_abdomen/camara0/sp/";
 		stringstream f_desc;
 		Mat all_desc = cv::Mat(nkeypoints2, 256, CV_32F);
 		Mat filter_desc = cv::Mat(nkeypoints2, 256, CV_32F);

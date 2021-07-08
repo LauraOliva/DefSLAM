@@ -75,7 +75,6 @@ namespace defSLAM
   // Main function of tracking.
   void DefTracking::Track()
   {
-    cout << "Track" << endl;
     if (mState == NO_IMAGES_YET)
     {
       mState = NOT_INITIALIZED;
@@ -87,7 +86,6 @@ namespace defSLAM
     if (mState == NOT_INITIALIZED)
     {
       this->MonocularInitialization();
-      cout << "Fail" << endl;
       if (mState != OK)
         return;
     }
@@ -495,11 +493,10 @@ namespace defSLAM
     {
       cv::cvtColor(imRectLeft, mImRGB, cv::COLOR_GRAY2RGB);
     }
-    cout << "new GT Frame" << endl;
     mCurrentFrame = new GroundTruthFrame(
         mImGray, timestamp, mpORBextractorLeft, mpORBVocabulary, mK, mDistCoef,
         mbf, mThDepth, imRectLeft, imGrayRight, _mask, filename);
-    cout << "trakkkkk" << endl;
+        
     this->Track();
 
     if ((mState == eTrackingState::OK) && (saveResults))
@@ -586,7 +583,7 @@ namespace defSLAM
   {
     /// Initialize the surface and the points in the surface considering a plane
     /// parallel to the camera plane
-    cout << "N " << mCurrentFrame->N << endl;
+    
     if (mCurrentFrame->N > 100)
     {
       // Set Frame pose to the origin

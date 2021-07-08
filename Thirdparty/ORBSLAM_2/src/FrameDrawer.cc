@@ -113,6 +113,7 @@ namespace ORB_SLAM2
           pt1.y = vCurrentKeys[i].pt.y - r;
           pt2.x = vCurrentKeys[i].pt.x + r;
           pt2.y = vCurrentKeys[i].pt.y + r;
+          cv::circle(im, vCurrentKeys[i].pt, 2, cv::Scalar(0, 255, 0), -1);
 
           // This is a match to a MapPoint in the map
           if (vbMap[i])

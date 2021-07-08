@@ -32,12 +32,12 @@ using namespace std;
 namespace ORB_SLAM2
 {
 
-  const int ORBmatcher::TH_HIGH = 0.75; //75 -100
+  const int ORBmatcher::TH_HIGH = 1; //75 -100
   const int ORBmatcher::TH_LOW = 0.75;  // 50
   const int ORBmatcher::HISTO_LENGTH = 30;
 
   ORBmatcher::ORBmatcher(float nnratio, bool checkOri)
-      : mfNNratio(0.9), mbCheckOrientation(checkOri) {}
+      : mfNNratio(nnratio), mbCheckOrientation(checkOri) {}
 
   int ORBmatcher::SearchByProjection(Frame &F,
                                      const vector<MapPoint *> &vpMapPoints,

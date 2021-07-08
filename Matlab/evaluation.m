@@ -2,6 +2,11 @@ close all; clear all;
 
 l = [];
 
+%% Paths
+
+path_orb = '/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_orginal/';
+path_ak = '/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
+
 %% Load files from folder
 path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
 name = "akaze";
