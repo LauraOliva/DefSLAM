@@ -4,14 +4,14 @@ l = [];
 
 %% Paths
 
-path_orb = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/exp_original/";
-path_ak = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/exp_ak/";
+path_orb = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/ab_original/";
+path_ak = "/home/laura/ExperimentsResults/DefSLAM/Hamlyn/ab_ak/";
 paths = [path_orb path_ak];
 leg = ["ORB" "A-KAZE"];
 
 %% Load files from folder
-path ='/home/laura/DefSLAM/ExperimentsResults/Hamlyn/exp_ak/';
-name = "akaze";
+path ="/home/laura/ExperimentsResults/DefSLAM/Hamlyn/ab_ak/";
+name = "A-KAZE";
 l = [l name];
 
 % Timestamps = ni, strat=200
@@ -110,7 +110,7 @@ groups = [];
 for p = 1:1:2
     path_p = paths(p)
     data_error_gt = [];
-    for i = 200:1:963
+    for i = 200:1:nimages
         % ErrorAnglso: angular RMS between the angle estimated by the IsoNRSfM and the angle error agter fitting a surface to the normals estimated.
         
         % ErrorAngSfN
@@ -138,6 +138,13 @@ end
 figure(4);
 boxplot(total_gt, groups);
 xtickangle(45);
+title("GT error");
+ylabel("3D RMS error(mm)");
+
+
+set(findobj(gca,'type','line'),'linew',3);
+
+set(gca, 'FontSize', 30);
 
 %% Evolution of the error
 

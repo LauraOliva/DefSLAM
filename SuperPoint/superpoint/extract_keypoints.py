@@ -181,12 +181,14 @@ if __name__ == '__main__':
 		desc = pred['descriptors'][0].cpu().numpy()
 		timer.update('forward')
 
-
-		# keypoints = [cv2.KeyPoint(p[0], p[1], 1) for p in kpts]
-		# out = frame
-		# out = cv2.drawKeypoints(frame, keypoints, out)
-		# cv2.imshow("out", out)
-		# cv2.waitKey(1)
+		print("Keypoints")
+		keypoints = [cv2.KeyPoint(p[0], p[1], 1) for p in kpts]
+		for kp in keypoints:
+			print(str(kp.pt[0]) + ", " + str(kp.pt[1]))
+		out = frame
+		out = cv2.drawKeypoints(frame, keypoints, out)
+		cv2.imshow("out", out)
+		cv2.waitKey(0)
 
 		kpts = np.array([[p[0], p[1]] for p in kpts])
 		#print(timestamps[i] + "\n")
